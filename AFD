@@ -1,0 +1,58 @@
+class AutomatoFinitoDeterministico:
+    def __init__(self):
+        self.estados = []
+        self.alfabeto = []
+        self.funcTransicao = {}
+        self.estadoInicial = ""
+        self.estadosFinais = []
+
+    def definirEstados(self):
+        self.estados = input("Informe o conjunto de estados: ").split()
+
+    def definirAlfabeto(self):
+        self.alfabeto = input("Informe o seu alfabeto: ").split()
+
+    def definirEstadoInicial(self):
+        self.estadoInicial = input("Informe o estado inicial: ")
+
+    def definirEstadosFinais(self):
+        self.estadosFinais = input("Informe os estados que são finais: ").split()
+
+    def definirTransicoes(self):
+        print("Defina as funções de transição:")
+        for estado in self.estados:
+            for simbolo in self.alfabeto:
+                transicao = input(f"\t{estado} lendo {simbolo} vai para -> ")
+                self.funcTransicao[(estado, simbolo)] = transicao if transicao != "." else None
+
+    def reconhecerLinguagem(self, entrada):
+        estadoAtual = self.estadoInicial
+        for simbolo in entrada:
+            proxEstado = self.funcTransicao.get((estadoAtual, simbolo), None)
+            if proxEstado is None:
+                return False
+            estadoAtual = proxEstado
+
+        return estadoAtual in self.estadosFinais
+
+
+#_____________________________________________________________________________
+
+# Criar instância do autômato
+afd = AutomatoFinitoDeterministico()
+
+# Definir estados, alfabeto, estado inicial, estados finais e funções de transição
+afd.definirEstados()
+afd.definirAlfabeto()
+afd.definirEstadoInicial()
+afd.definirEstadosFinais()
+afd.definirTransicoes()
+
+# Informar a linguagem a ser reconhecida
+entrada = input("Informe a linguagem a ser reconhecida: ")
+
+# Reconhecer a linguagem
+if afd.reconhecerLinguagem(entrada):
+    print("Aceita")
+else:
+    print("Rejeita")
